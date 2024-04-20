@@ -8,7 +8,7 @@ export const Data = () => {
   // Display a loading indicator if the request is in progress
   if (isLoading) return <h1>Loading...</h1>;
   // Display an error message if the request failed
-  if (error) return <div>Error loading cart items</div>;
+  if (error) return <h1>Error loading User Data</h1>;
   console.log("data", data);
   return (
     <div style={{ padding: "10px" }}>
