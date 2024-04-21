@@ -25,6 +25,9 @@ export const Data = () => {
       >
         <thead>
           <tr style={{ backgroundColor: "#f2f2f2" }}>
+          <th style={{ border: "1px solid #ddd", padding: "8px" }}>
+              ID
+            </th>
             <th style={{ border: "1px solid #ddd", padding: "8px" }}>
               First Name
             </th>
@@ -36,8 +39,11 @@ export const Data = () => {
           </tr>
         </thead>
         <tbody>
-          {data?.users?.map((user: any) => (
+          {data?.map((user: any) => (
             <tr key={user.id}>
+               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                {user.id}
+              </td>
               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                 {user.firstName}
               </td>
@@ -48,7 +54,7 @@ export const Data = () => {
                 {user.email}
               </td>
               <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                {user.phone}
+                {user.phoneNumber}
               </td>
             </tr>
           ))}

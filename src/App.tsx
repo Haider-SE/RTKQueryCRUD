@@ -1,10 +1,10 @@
 import "./App.css";
 import { Data } from "./components/users/Data";
-import UpdateUserComponent from "./components/users/updateUserData";
+import AddUserComponent from "./components/users/AddUserData";
 function App() {
   return (
     <>
-      <UpdateUserComponent />
+      <AddUserComponent />
       <Data />
     </>
   );

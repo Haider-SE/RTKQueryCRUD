@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { User } from "../components/users/AddUserData";
 
 // Define an API service using RTK Query which allows us to handle data fetching
 // and caching logic with minimal configuration
@@ -6,7 +7,7 @@ export const usersAPI = createApi({
   // Unique key for the reducer this API generates
   reducerPath: "usersAPI",
   // Set the base URL for all queries in this API
-  baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/" }),
   tagTypes: ["Users"],
   // Define API endpoints and the queries they should execute
   endpoints: (builder) => ({
@@ -15,34 +16,24 @@ export const usersAPI = createApi({
       query: () => "users",
       providesTags: ["Users"],
     }),
-    updateUser: builder.mutation({
-      query: ({ userId, ...patchData }) => ({
-        url: `users/${userId}`,
-        method: "PATCH",
-        body: patchData,
+    addUser: builder.mutation({
+      query: (userData) => ({
+        url: `users`,
+        method: "POST",
+        body: userData,
       }),
       // This line indicates which tags to invalidate once the mutation successfully completes.
       invalidatesTags: ["Users"],
-      onQueryStarted: async (
-        { userId, ...patchData },
-        { dispatch, queryFulfilled, getState }
-      ) => {
-        // Step 1: Capture the current state for possible rollback
-        const previousUser =
-          getState().usersAPI.queries[`getUserById(${userId})`]?.data;
-
-        // Step 2: Apply the optimistic update to the cache
-        if (previousUser) {
-          dispatch(
-            usersAPI.util.updateQueryData("getAllUsers", undefined, (draft) => {
-              const index = draft.findIndex((user: any) => user.id === userId);
-              if (index !== -1) {
-                draft[index] = { ...draft[index], ...patchData };
-              }
-            })
-          );
-        }
-
+      onQueryStarted: async (userData, { dispatch, queryFulfilled }) => {
+        const patchResult = dispatch(
+          usersAPI.util.updateQueryData(
+            "getAllUsers",
+            undefined,
+            (draft: User[]) => {
+              return [...draft, userData]; //returns updated data immediately to show on the UI
+            }
+          )
+        );
         try {
           // Step 3: Re-fetch the data after the mutation succeeds
           await queryFulfilled;
@@ -52,22 +43,7 @@ export const usersAPI = createApi({
           dispatch(usersAPI.util.invalidateTags(["Users"]));
         } catch {
           // Step 4: Rollback the optimistic update if the mutation fails
-          if (previousUser) {
-            dispatch(
-              usersAPI.util.updateQueryData(
-                "getAllUsers",
-                undefined,
-                (draft) => {
-                  const index = draft.findIndex(
-                    (user: any) => user.id === userId
-                  );
-                  if (index !== -1) {
-                    draft[index] = previousUser;
-                  }
-                }
-              )
-            );
-          }
+          patchResult.undo();
         }
       },
     }),
@@ -75,4 +51,4 @@ export const usersAPI = createApi({
 });
 // Automatically generated hooks for each endpoint defined above.
 // These hooks encapsulate the data fetching logic.
-export const { useGetAllUsersQuery, useUpdateUserMutation } = usersAPI;
+export const { useGetAllUsersQuery, useAddUserMutation } = usersAPI;

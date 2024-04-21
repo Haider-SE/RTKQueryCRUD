@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "firstName": "Juliet",
+      "lastName": "test",
+      "email": "julie@yahoo.com",
+      "phoneNumber": "08100000000"
+    },
+    {
+      "id": 2,
+      "firstName": "James",
+      "lastName": "test",
+      "email": "jameswilly@gmail.com",
+      "phoneNumber": "08111111111"
+    },
+    {
+      "id": 3,
+      "firstName": "Ahmed",
+      "lastName": "Ali",
+      "email": "ahmedali012@gmail.com",
+      "phoneNumber": "09022222222"
+    },
+    {
+      "id": 4,
+      "firstName": "Grace",
+      "lastName": "Parker",
+      "email": "graceparker@gmail.com",
+      "phoneNumber": "09033333333"
+    }
+  ]
+}
